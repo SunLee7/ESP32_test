@@ -52,6 +52,7 @@ void setup() {
     delay(5000);
   }
 
+
   xTaskCreatePinnedToCore(Taskmain      //任务名称
                           , "Taskmain"
                           , 10000        //堆栈大小
