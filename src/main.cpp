@@ -50,7 +50,7 @@ void setup() {
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {
     Serial.println("Connection Failed! Rebooting...");
     delay(5000);
-  
+  }
 
   xTaskCreatePinnedToCore(Taskmain      //任务名称
                           , "Taskmain"
