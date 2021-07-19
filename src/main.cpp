@@ -11,6 +11,9 @@
 const char* ssid = "好好学习，天天上网";
 const char* password = "Freescale";
 
+// const char* ssid = "Sun Lee";
+// const char* password = "11112222";
+
 float floatbuff[10];
 
 TFT_eSPI tft;
