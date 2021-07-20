@@ -11,8 +11,8 @@ void mylv_init();
 
 extern TFT_eSPI tft;
 extern lv_obj_t *lvgl_led1;
-extern lv_obj_t * pic1;
-extern lv_obj_t *MPU_Lable;
+extern lv_obj_t *pic1;
+extern lv_obj_t *MPU_Label, *Time_Label;
 extern int16_t encoder_moves ,encoder_pressed;
 
 // #ifdef __cplusplus

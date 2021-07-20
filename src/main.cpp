@@ -14,6 +14,11 @@ const char* password = "Freescale";
 // const char* ssid = "Sun Lee";
 // const char* password = "11112222";
 
+//获取系统时间相关
+const char* ntpServer = "ntp.ntsc.ac.cn";
+const long  gmtOffset_sec = 8*60*60;//这里采用UTC计时，中国为东八区，就是 8*60*60;
+const int   daylightOffset_sec = 0*60*60;
+
 float floatbuff[10];
 
 TFT_eSPI tft;
@@ -31,20 +36,38 @@ void Taskwifi(void *pvParameters);
 uint8_t OTAFlag = 0;
 void OTAStart();
 
+//打印系统时间
+void printLocalTime()
+{
+  struct tm timeinfo;
+  if(!getLocalTime(&timeinfo)){
+    Serial.println("Failed to obtain time");
+    return;
+  }
+  Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+  lv_label_set_text_fmt(Time_Label, "%02d:%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+  lv_obj_align(Time_Label, NULL, LV_ALIGN_CENTER, 0, 0);
+}
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(2, OUTPUT);
   pinMode(0, INPUT);
   Serial.begin(115200);
+
+  //初始化显示器以及LVGL
   tft.init();
   tft.initDMA();
   tft.fillScreen(TFT_BLACK);
   mylv_init();
+
+  //初始化MPU6050
   mpu.begin();
   mpu_temp = mpu.getTemperatureSensor();
   mpu_accel = mpu.getAccelerometerSensor();
   mpu_gyro = mpu.getGyroSensor();
 
+  //初始化WIFI
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {
@@ -52,7 +75,11 @@ void setup() {
     delay(5000);
   }
 
+  //初始化并打印系统时间
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+  printLocalTime();
 
+  //初始化RTOS任务
   xTaskCreatePinnedToCore(Taskmain      //任务名称
                           , "Taskmain"
                           , 10000        //堆栈大小
@@ -123,9 +150,11 @@ void Taskmain(void *pvParameters)
     // Serial.write(0x00);
     // Serial.write(0x80);
     // Serial.write(0x7f);
+
     //将数据显示在LGVL的Label上
-    // lv_label_set_text_fmt(MPU_Lable, "x:%f\ny:%f\nz:%f\n%d\n%d", accel.acceleration.x, accel.acceleration.y, accel.acceleration.z, encoder_pressed, encoder_moves);
-    // lv_obj_align(MPU_Lable, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
+    // lv_label_set_text_fmt(MPU_Label, "x:%f\ny:%f\nz:%f\n%d\n%d", accel.acceleration.x, accel.acceleration.y, accel.acceleration.z, encoder_pressed, encoder_moves);
+    // lv_obj_align(MPU_Label, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
+    printLocalTime();
 
     if(!digitalRead(0)) //GPIO0按键读取
     {

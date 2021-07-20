@@ -71,15 +71,15 @@ void lv_ex_get_started_1(void)
     static lv_obj_t * label = lv_label_create(btn, NULL);          /*Add a label to the button*/
     lv_label_set_text(label, "Button");                     /*Set the labels text*/
 
-    static lv_obj_t * btn1 = lv_btn_create(lv_scr_act(), NULL);     /*Add a button the current screen*/
-    lv_obj_set_pos(btn1, 50, 100);                            /*Set its position*/
-    lv_obj_set_size(btn1, 120, 50);                          /*Set its size*/
+    // static lv_obj_t * btn1 = lv_btn_create(lv_scr_act(), NULL);     /*Add a button the current screen*/
+    // lv_obj_set_pos(btn1, 50, 100);                            /*Set its position*/
+    // lv_obj_set_size(btn1, 120, 50);                          /*Set its size*/
 
-    static lv_obj_t * label1 = lv_label_create(btn1, NULL);          /*Add a label to the button*/
-    lv_label_set_text(label1, "Button1");   
+    // static lv_obj_t * label1 = lv_label_create(btn1, NULL);          /*Add a label to the button*/
+    // lv_label_set_text(label1, "Button1");   
 
     lv_group_add_obj(g, btn);
-    lv_group_add_obj(g, btn1);
+    // lv_group_add_obj(g, btn1);
 }
 
 static void event_handler(lv_obj_t * obj, lv_event_t event)
@@ -117,11 +117,14 @@ void lv_ex_spinner_1(void)
     lv_obj_align(preload, NULL, LV_ALIGN_IN_TOP_RIGHT, -5, 5);
 }
 
-lv_obj_t *MPU_Lable;
+lv_obj_t *MPU_Label;
+lv_obj_t *Time_Label;
 void lv_ex_label_1(void)
 {
+    lv_obj_t * label = lv_label_create(lv_scr_act(), NULL);
+    MPU_Label = label;
     lv_obj_t * label2 = lv_label_create(lv_scr_act(), NULL);
-    MPU_Lable = label2;
+    Time_Label = label2;
     // lv_label_set_text(label2, "Li Ze is A Sabi");
     // lv_label_set_text_fmt(label2, "%.2f\n%.2f", 123.123, 456.789);
     // lv_obj_align(label2, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
@@ -291,7 +294,7 @@ void mylv_init(void)
     lv_ex_get_started_1();
     // // lv_ex_led_1();
     lv_ex_spinner_1();
-    // lv_ex_label_1();
+    lv_ex_label_1();
     lv_ex_checkbox_1();
     // lv_show_picture();
     // animation();
